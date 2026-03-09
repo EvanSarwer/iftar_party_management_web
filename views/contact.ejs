@@ -1,0 +1,50 @@
+<%- include('partials/header', { title, currentPage }) %>
+
+<section class="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+  <div class="glass-panel rounded-[2rem] p-8 sm:p-10">
+    <div class="max-w-3xl">
+      <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Contact & Contribution</p>
+      <h2 class="mt-3 text-4xl font-extrabold text-white">All collection and venue information in one place</h2>
+      <p class="mt-4 text-base leading-8 text-slate-300">Use the following contact details to complete your contribution or reach out for any questions related to the CBA14 Iftar Gathering.</p>
+    </div>
+
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+      <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
+        <p class="text-sm uppercase tracking-[0.25em] text-slate-400">bKash Payment</p>
+        <h3 class="mt-3 text-3xl font-extrabold text-white"><%= event.bkash %></h3>
+        <p class="mt-4 text-slate-300">Please provide your name and mobile number while sending the contribution.</p>
+      </div>
+      <div class="rounded-[1.75rem] border border-white/10 bg-gradient-to-br from-brand-500/15 via-white/5 to-transparent p-6">
+        <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Event Schedule</p>
+        <h3 class="mt-3 text-2xl font-extrabold text-white"><%= event.dateLabel %></h3>
+        <p class="mt-4 text-slate-300">Venue: <%= event.venue %></p>
+        <p class="mt-2 text-slate-300">Contribution deadline: <%= event.collectionDeadlineLabel %></p>
+      </div>
+    </div>
+
+    <div class="mt-8 grid gap-6 lg:grid-cols-[1fr_0.9fr]">
+      <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
+        <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Cash Submission Points</p>
+        <ul class="mt-5 space-y-4 text-slate-200">
+          <% event.collectionPoints.forEach((point, index) => { %>
+            <li class="flex items-start gap-4 rounded-2xl border border-white/10 bg-slate-950/50 p-4">
+              <span class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-brand-500 font-bold text-slate-950"><%= index + 1 %></span>
+              <span class="leading-7"><%= point %></span>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+      <div class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6">
+        <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Why this gathering matters</p>
+        <div class="mt-5 space-y-4 text-slate-300">
+          <div class="rounded-2xl bg-slate-950/50 p-4">Reconnect with classmates from Batch CBA14.</div>
+          <div class="rounded-2xl bg-slate-950/50 p-4">Celebrate Ramadan with unity, warmth, and brotherhood.</div>
+          <div class="rounded-2xl bg-slate-950/50 p-4">Make the evening memorable with a meaningful get-together.</div>
+        </div>
+        <a href="https://wa.me/<%= event.whatsAppNumber %>?text=Assalamu%20Alaikum%2C%20I%20have%20a%20question%20about%20the%20CBA14%20Iftar%20event." target="_blank" rel="noreferrer" class="mt-6 inline-flex rounded-full bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Contact on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

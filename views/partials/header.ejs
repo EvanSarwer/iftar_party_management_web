@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#f6f2e8',
+                100: '#efe4c7',
+                200: '#e3cf97',
+                300: '#d5b463',
+                400: '#c89d3f',
+                500: '#b68024',
+                600: '#93661c',
+                700: '#724d16',
+                800: '#513711',
+                900: '#33230a'
+              }
+            },
+            boxShadow: {
+              glow: '0 20px 60px rgba(182, 128, 36, 0.24)'
+            }
+          }
+        }
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+      (function () {
+        try {
+          var savedTheme = localStorage.getItem('theme');
+          if (savedTheme === 'light') {
+            document.documentElement.classList.add('light-theme');
+          }
+        } catch (error) {
+          console.warn('Theme preference unavailable.', error);
+        }
+      })();
+    </script>
+  </head>
+  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+    <div class="app-background fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(182,128,36,0.24),_transparent_35%),linear-gradient(135deg,#020617_0%,#0f172a_40%,#111827_100%)]"></div>
+      <div class="absolute -top-24 left-1/2 h-80 w-80 -translate-x-1/2 rounded-full bg-brand-500/10 blur-3xl"></div>
+    </div>
+
+    <header class="site-header sticky top-0 z-40 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
+      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <a href="/" class="flex items-center gap-3 self-start lg:self-auto">
+          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500/15 text-xl shadow-glow">🌙</div>
+          <div>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-brand-300 sm:text-xs sm:tracking-[0.35em]">Batch CBA14</p>
+            <h1 class="text-base font-extrabold text-white sm:text-lg">Iftar Gathering 2026</h1>
+          </div>
+        </a>
+        <div class="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center">
+          <nav class="site-nav grid w-full grid-cols-3 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-1 text-center text-sm font-medium lg:w-auto lg:rounded-full">
+            <a href="/" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'home' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Home</a>
+            <a href="/contact" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'contact' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Contact</a>
+            <a href="/admin" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'admin' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Admin</a>
+          </nav>
+          <button type="button" class="theme-toggle inline-flex items-center justify-center gap-2 self-end rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 lg:self-auto" data-theme-toggle aria-label="Switch to light mode">
+            <span class="theme-toggle-icon" aria-hidden="true">☀️</span>
+            <span class="theme-toggle-text">Light</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>

@@ -1,0 +1,53 @@
+{
+  "event": {
+    "title": "Iftar Gathering 2026",
+    "tagline": "Ahlan Sahlan – Blessed Month of Ramadan",
+    "description": "On the occasion of the holy month of Ramadan, you are cordially invited to our Iftar gathering. Let us come together to strengthen the bonds of brotherhood, harmony, and love, and share the joy of Iftar with one another.",
+    "contribution": 300,
+    "currency": "BDT",
+    "collectionDeadlineLabel": "26th Ramadan",
+    "dateLabel": "March 18, 2026 (28 Ramadan)",
+    "venue": "Kacchi Sab (3rd Floor, City Bank Building)",
+    "whatsAppNumber": "8801676082387",
+    "bkash": "01676082387 (Rabbi)",
+    "collectionPoints": [
+      "Riyad Electronics (Below Southeast Bank)",
+      "Kibria Fashion (College Super Market)"
+    ],
+    "note": "Please provide your name and mobile number when submitting the contribution."
+  },
+  "attendees": [
+    {
+      "id": "sample-1",
+      "name": "K Hasan Nahid",
+      "phone": "01XXXXXXXXX",
+      "status": "confirmed",
+      "createdAt": "2026-03-09T12:00:00.000Z",
+      "confirmedAt": "2026-03-09T18:31:31.104Z"
+    },
+    {
+      "id": "sample-2",
+      "name": "Fahim Ahmed",
+      "phone": "01YYYYYYYYY",
+      "status": "confirmed",
+      "createdAt": "2026-03-09T13:00:00.000Z",
+      "confirmedAt": "2026-03-09T14:49:23.410Z"
+    },
+    {
+      "id": "1773081034131-ugw5ni",
+      "name": "Saiful Islam Bhuiyan",
+      "phone": "01676082387",
+      "status": "confirmed",
+      "createdAt": "2026-03-09T18:30:34.133Z",
+      "confirmedAt": "2026-03-09T18:31:34.410Z"
+    },
+    {
+      "id": "1773099426581-1lq405",
+      "name": "Nahid",
+      "phone": "01749589898",
+      "status": "pending",
+      "createdAt": "2026-03-09T23:37:06.581Z",
+      "confirmedAt": null
+    }
+  ]
+}

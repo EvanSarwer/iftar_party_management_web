@@ -1,0 +1,256 @@
+<%- include('partials/header', { title, currentPage }) %>
+
+<section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+  <% if (!isAdmin) { %>
+    <div class="mx-auto max-w-xl glass-panel rounded-[2rem] p-8 sm:p-10">
+      <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Admin Access</p>
+      <h2 class="mt-3 text-3xl font-extrabold text-white">Login to manage attendance</h2>
+      <p class="mt-4 text-sm leading-7 text-slate-300">Use the fixed admin password to review pending requests and confirm classmates.</p>
+      <form action="/admin/login" method="post" class="mt-8 space-y-4">
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-200" for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter admin password" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+        </div>
+        <% if (loginError) { %>
+          <div class="rounded-2xl border border-rose-400/20 bg-rose-500/10 px-4 py-3 text-sm text-rose-300">Incorrect password. Please try again.</div>
+        <% } %>
+        <button type="submit" class="w-full rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Login</button>
+      </form>
+    </div>
+  <% } else { %>
+    <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+      <div class="space-y-8">
+        <div class="glass-panel rounded-[2rem] p-8">
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Dashboard</p>
+              <h2 class="mt-3 text-3xl font-extrabold text-white">Admin controls</h2>
+            </div>
+            <form action="/admin/logout" method="post">
+              <button type="submit" class="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10">Logout</button>
+            </form>
+          </div>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="text-sm text-slate-400">Total</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= attendees.length %></p>
+            </div>
+            <div class="rounded-3xl border border-emerald-400/10 bg-emerald-500/10 p-5">
+              <p class="text-sm text-slate-400">Confirmed</p>
+              <p class="mt-2 text-3xl font-extrabold text-emerald-300"><%= confirmedAttendees.length %></p>
+            </div>
+            <div class="rounded-3xl border border-amber-400/10 bg-amber-500/10 p-5">
+              <p class="text-sm text-slate-400">Pending</p>
+              <p class="mt-2 text-3xl font-extrabold text-amber-300"><%= pendingAttendees.length %></p>
+            </div>
+          </div>
+        </div>
+
+        <% if (adminMessage) { %>
+          <div class="rounded-[2rem] border border-brand-400/20 bg-brand-500/10 px-6 py-4 text-sm font-semibold text-brand-200">
+            <%= adminMessage %>
+          </div>
+        <% } %>
+
+        <div class="glass-panel rounded-[2rem] p-8">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Pending Requests</p>
+              <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">Confirm classmates from the waiting list</h3>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div class="w-full lg:w-72">
+                <input type="text" data-admin-search="pending" placeholder="Search pending by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+              </div>
+              <span class="rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-300"><%= pendingAttendees.length %> pending</span>
+            </div>
+          </div>
+
+          <div class="mt-6 space-y-4">
+            <% if (!pendingAttendees.length) { %>
+              <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee right now.</div>
+            <% } %>
+
+            <div data-admin-empty="pending" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee found with this name.</div>
+
+            <% pendingAttendees.forEach((attendee) => { %>
+              <div data-admin-item="pending" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
+                  <div class="grid gap-3 md:grid-cols-2">
+                    <div>
+                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                      <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                    </div>
+                    <div>
+                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
+                      <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                    </div>
+                  </div>
+
+                  <p class="text-xs text-slate-500">Requested on <%= new Date(attendee.createdAt).toLocaleString() %></p>
+                  <div class="mt-3">
+                    <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                  </div>
+                </form>
+                <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                  <form action="/admin/confirm/<%= attendee.id %>" method="post">
+                    <button type="submit" class="w-full rounded-2xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-400">Confirm</button>
+                  </form>
+                  <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
+                    <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                  </form>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="glass-panel rounded-[2rem] p-8">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Today's Join Card</p>
+              <h3 class="mt-3 text-2xl font-extrabold text-white">Shareable Ramadan attendance card</h3>
+              <p class="mt-2 text-sm text-slate-300">Download this card and share it with classmates on WhatsApp or social media.</p>
+            </div>
+            <button type="button" data-download-card class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-brand-400">
+              Download Card
+            </button>
+          </div>
+
+          <div class="mt-6 share-card-wrapper">
+            <div class="share-iftar-card" data-share-card>
+              <div class="share-iftar-card__pattern"></div>
+              <div class="share-iftar-card__orbit share-iftar-card__orbit--one"></div>
+              <div class="share-iftar-card__orbit share-iftar-card__orbit--two"></div>
+
+              <div class="relative z-10 flex h-full flex-col">
+                <div class="flex items-start justify-between gap-4">
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-[0.45em] text-brand-200">Batch CBA14</p>
+                    <h4 class="mt-3 text-3xl font-extrabold text-white sm:text-4xl">Iftar & Eid Vibes</h4>
+                    <p class="mt-3 max-w-xl text-sm leading-7 text-slate-200">
+                      Alhamdulillah, these friends confirmed today for our blessed Ramadan gathering.
+                    </p>
+                  </div>
+                  <div class="share-iftar-card__crescent">🌙</div>
+                </div>
+
+                <div class="mt-8 grid gap-4 sm:grid-cols-[0.9fr_1.1fr]">
+                  <div class="rounded-[1.5rem] border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                    <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Event Date</p>
+                    <p class="mt-3 text-lg font-bold text-white"><%= event.dateLabel %></p>
+
+                    <p class="mt-6 text-xs uppercase tracking-[0.35em] text-brand-200">Venue</p>
+                    <p class="mt-3 text-sm leading-7 text-slate-200"><%= event.venue %></p>
+
+                    <div class="mt-6 rounded-2xl bg-emerald-500/15 px-4 py-4 text-center">
+                      <p class="text-xs uppercase tracking-[0.25em] text-emerald-200">Confirmed Today</p>
+                      <p class="mt-2 text-4xl font-extrabold text-white"><%= todayConfirmed.length %></p>
+                    </div>
+                  </div>
+
+                  <div class="rounded-[1.5rem] border border-white/15 bg-slate-950/35 p-5 backdrop-blur-sm">
+                    <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                      <div>
+                        <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Attendance Highlight</p>
+                        <p class="mt-2 text-lg font-bold text-white"><%= new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                      </div>
+                      <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-100">Ramadan 2026</span>
+                    </div>
+
+                    <div class="mt-5 space-y-3">
+                      <% if (!todayConfirmed.length) { %>
+                        <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-8 text-center text-slate-300">
+                          No new confirmation today yet. InshaAllah, more friends will join soon.
+                        </div>
+                      <% } %>
+
+                      <% todayConfirmed.forEach((attendee, index) => { %>
+                        <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3">
+                          <div class="flex items-center gap-3">
+                            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 font-bold text-slate-950"><%= index + 1 %></span>
+                            <div>
+                              <p class="font-bold text-white"><%= attendee.name %></p>
+                              <p class="text-xs text-slate-300"><%= attendee.phone %></p>
+                            </div>
+                          </div>
+                          <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-200">Joined Today</span>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
+                  <p>Contribution: <span class="font-bold text-brand-200"><%= event.contribution %> <%= event.currency %></span></p>
+                  <p>May Allah bless our reunion with joy, unity, and barakah.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="glass-panel rounded-[2rem] p-8">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Confirmed List</p>
+              <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">All approved attendees</h3>
+            </div>
+            <div class="w-full lg:w-72">
+              <input type="text" data-admin-search="confirmed" placeholder="Search confirmed by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+            </div>
+          </div>
+          <div class="mt-6 space-y-3">
+            <% if (!confirmedAttendees.length) { %>
+              <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee yet.</div>
+            <% } %>
+
+            <div data-admin-empty="confirmed" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee found with this name.</div>
+
+            <% confirmedAttendees.forEach((attendee) => { %>
+              <div data-admin-item="confirmed" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
+                  <div class="grid gap-3 md:grid-cols-2">
+                    <div>
+                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                      <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                    </div>
+                    <div>
+                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
+                      <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                    </div>
+                  </div>
+
+                  <div class="flex flex-wrap items-center gap-3">
+                    <span class="status-badge status-confirmed">✓ confirmed</span>
+                    <span class="text-xs text-slate-500">
+                      Confirmed on <%= attendee.confirmedAt ? new Date(attendee.confirmedAt).toLocaleString() : '—' %>
+                    </span>
+                  </div>
+                  <div class="mt-3">
+                    <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                  </div>
+                </form>
+                <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                  <form action="/admin/pending/<%= attendee.id %>" method="post">
+                    <button type="submit" class="w-full rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400">Pending</button>
+                  </form>
+                  <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
+                    <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                  </form>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<%- include('partials/footer') %>
