@@ -11,16 +11,22 @@ const DATA_FILE = path.join(__dirname, 'data', 'store.json');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.set('trust proxy', 1);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
   session({
+    name: 'cba14.sid',
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    proxy: true,
     cookie: {
       maxAge: 1000 * 60 * 60 * 8,
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: 'auto',
     },
   })
 );
@@ -210,14 +216,14 @@ app.post('/api/attendees', async (req, res) => {
 });
 
 app.post('/admin/login', (req, res) => {
-  const password = String(req.body.password || '');
+  const password = String(req.body.password || '').trim();
 
   if (password !== ADMIN_PASSWORD) {
     return res.redirect('/admin?error=1');
   }
 
   req.session.isAdmin = true;
-  return res.redirect('/admin');
+  return req.session.save(() => res.redirect('/admin'));
 });
 
 app.post('/admin/logout', (req, res) => {

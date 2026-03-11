@@ -18,14 +18,6 @@
   },
   "attendees": [
     {
-      "id": "sample-1",
-      "name": "K Hasan Nahid",
-      "phone": "01XXXXXXXXX",
-      "status": "confirmed",
-      "createdAt": "2026-03-09T12:00:00.000Z",
-      "confirmedAt": "2026-03-09T18:31:31.104Z"
-    },
-    {
       "id": "sample-2",
       "name": "Fahim Ahmed",
       "phone": "01YYYYYYYYY",
@@ -45,9 +37,9 @@
       "id": "1773099426581-1lq405",
       "name": "Nahid",
       "phone": "01749589898",
-      "status": "pending",
+      "status": "confirmed",
       "createdAt": "2026-03-09T23:37:06.581Z",
-      "confirmedAt": null
+      "confirmedAt": "2026-03-11T07:28:08.955Z"
     }
   ]
 }

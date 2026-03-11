@@ -54,6 +54,26 @@
         <% } %>
 
         <div class="glass-panel rounded-[2rem] p-8">
+          <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-200 sm:text-xs sm:tracking-[0.35em]">Join the Gathering</p>
+          <h3 class="mt-3 text-2xl font-extrabold text-white sm:text-3xl">Add your name to the attendee list</h3>
+          <p class="mt-3 text-sm leading-7 text-slate-300">
+            Submit your name and mobile number. Your request will appear as pending until the admin confirms your joining.
+          </p>
+          <form class="mt-6 space-y-4" data-attendee-form>
+            <div>
+              <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-name">Full name</label>
+              <input id="admin-name" name="name" type="text" placeholder="Enter your name" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-phone">Mobile number</label>
+              <input id="admin-phone" name="phone" type="text" placeholder="01XXXXXXXXX" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
+            </div>
+            <button type="submit" class="w-full rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Submit as Pending</button>
+            <p data-attendee-message class="mt-4 text-sm text-slate-400">Your status will be visible in the list below after submission.</p>
+          </form>
+        </div>
+
+        <div class="glass-panel rounded-[2rem] p-8">
           <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
             <div>
               <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Pending Requests</p>

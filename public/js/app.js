@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.querySelector('[data-attendee-search]');
   const attendeeItems = Array.from(document.querySelectorAll('[data-attendee-item]'));
   const attendeeEmpty = document.querySelector('[data-attendee-empty]');
-  const attendeeForm = document.querySelector('[data-attendee-form]');
-  const attendeeMessage = document.querySelector('[data-attendee-message]');
+  const attendeeForms = Array.from(document.querySelectorAll('[data-attendee-form]'));
   const downloadCardButton = document.querySelector('[data-download-card]');
   const shareCard = document.querySelector('[data-share-card]');
   const adminSearchInputs = Array.from(document.querySelectorAll('[data-admin-search]'));
@@ -93,48 +92,56 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (attendeeForm && attendeeMessage) {
-    attendeeForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      attendeeMessage.textContent = 'Submitting...';
-      attendeeMessage.className = 'mt-4 text-sm text-brand-200';
+  if (attendeeForms.length) {
+    attendeeForms.forEach((attendeeForm) => {
+      const attendeeMessage = attendeeForm.querySelector('[data-attendee-message]');
 
-      const formData = new FormData(attendeeForm);
-      const payload = Object.fromEntries(formData.entries());
-      const duplicateEntry = attendeeItems.find((item) => {
-        const existingName = normalizeName(item.dataset.name || '');
-        const existingPhone = normalizePhone(item.dataset.phone || '');
-
-        return existingName === normalizeName(String(payload.name || '')) || existingPhone === normalizePhone(String(payload.phone || ''));
-      });
-
-      if (duplicateEntry) {
-        attendeeMessage.textContent = 'Name and mobile number must both be unique. Duplicate entry is not allowed.';
-        attendeeMessage.className = 'mt-4 text-sm text-rose-300';
+      if (!attendeeMessage) {
         return;
       }
 
-      try {
-        const response = await fetch('/api/attendees', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
+      attendeeForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        attendeeMessage.textContent = 'Submitting...';
+        attendeeMessage.className = 'mt-4 text-sm text-brand-200';
+
+        const formData = new FormData(attendeeForm);
+        const payload = Object.fromEntries(formData.entries());
+        const duplicateEntry = attendeeItems.find((item) => {
+          const existingName = normalizeName(item.dataset.name || '');
+          const existingPhone = normalizePhone(item.dataset.phone || '');
+
+          return existingName === normalizeName(String(payload.name || '')) || existingPhone === normalizePhone(String(payload.phone || ''));
         });
 
-        const result = await response.json();
-        attendeeMessage.textContent = result.message;
-        attendeeMessage.className = `mt-4 text-sm ${result.ok ? 'text-emerald-300' : 'text-rose-300'}`;
-
-        if (result.ok) {
-          attendeeForm.reset();
-          window.setTimeout(() => window.location.reload(), 900);
+        if (duplicateEntry) {
+          attendeeMessage.textContent = 'Name and mobile number must both be unique. Duplicate entry is not allowed.';
+          attendeeMessage.className = 'mt-4 text-sm text-rose-300';
+          return;
         }
-      } catch (error) {
-        attendeeMessage.textContent = 'Something went wrong. Please try again.';
-        attendeeMessage.className = 'mt-4 text-sm text-rose-300';
-      }
+
+        try {
+          const response = await fetch('/api/attendees', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+
+          const result = await response.json();
+          attendeeMessage.textContent = result.message;
+          attendeeMessage.className = `mt-4 text-sm ${result.ok ? 'text-emerald-300' : 'text-rose-300'}`;
+
+          if (result.ok) {
+            attendeeForm.reset();
+            window.setTimeout(() => window.location.reload(), 900);
+          }
+        } catch (error) {
+          attendeeMessage.textContent = 'Something went wrong. Please try again.';
+          attendeeMessage.className = 'mt-4 text-sm text-rose-300';
+        }
+      });
     });
   }
 
