@@ -54,21 +54,28 @@
     </div>
 
     <header class="site-header sticky top-0 z-40 border-b border-white/10 bg-slate-950/75 backdrop-blur-xl">
-      <div class="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
-        <a href="/" class="flex items-center gap-3 self-start lg:self-auto">
-          <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500/15 text-xl shadow-glow">🌙</div>
-          <div>
-            <p class="text-[10px] uppercase tracking-[0.3em] text-brand-300 sm:text-xs sm:tracking-[0.35em]">Batch CBA14</p>
-            <h1 class="text-base font-extrabold text-white sm:text-lg">Iftar Gathering 2026</h1>
-          </div>
-        </a>
-        <div class="flex w-full flex-col gap-3 lg:w-auto lg:flex-row lg:items-center">
-          <nav class="site-nav grid w-full grid-cols-3 items-center gap-2 rounded-2xl border border-white/10 bg-white/5 p-1 text-center text-sm font-medium lg:w-auto lg:rounded-full">
+      <div class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div class="flex w-full items-center justify-between gap-3 lg:w-auto lg:flex-1 lg:justify-start">
+          <a href="/" class="flex min-w-0 items-center gap-2.5 self-start lg:self-auto">
+            <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-500/15 text-lg shadow-glow sm:h-11 sm:w-11 sm:rounded-2xl sm:text-xl">🌙</div>
+            <div class="min-w-0">
+              <p class="text-[9px] uppercase tracking-[0.24em] text-brand-300 sm:text-xs sm:tracking-[0.35em]">Batch CBA14</p>
+              <h1 class="text-sm font-extrabold text-white sm:text-lg">Iftar Gathering 2026</h1>
+            </div>
+          </a>
+          <button type="button" class="theme-toggle inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:px-4 sm:text-sm lg:hidden" data-theme-toggle aria-label="Switch to light mode">
+            <span class="theme-toggle-icon" aria-hidden="true">☀️</span>
+            <span class="theme-toggle-text">Light</span>
+          </button>
+        </div>
+        <div class="flex w-full flex-col gap-2.5 lg:w-auto lg:flex-row lg:items-center">
+          <nav class="site-nav grid w-full grid-cols-2 items-center gap-1.5 rounded-2xl border border-white/10 bg-white/5 p-1 text-center text-xs font-medium sm:grid-cols-4 sm:gap-2 sm:text-sm lg:w-auto lg:rounded-full">
             <a href="/" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'home' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Home</a>
+            <a href="/calculation" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'calculation' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Calculation</a>
             <a href="/contact" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'contact' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Contact</a>
             <a href="/admin" class="rounded-xl px-3 py-2 transition lg:rounded-full lg:px-4 <%= currentPage === 'admin' ? 'bg-brand-500 text-slate-950' : 'text-slate-200 hover:bg-white/10' %>">Admin</a>
           </nav>
-          <button type="button" class="theme-toggle inline-flex items-center justify-center gap-2 self-end rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10 lg:self-auto" data-theme-toggle aria-label="Switch to light mode">
+          <button type="button" class="theme-toggle hidden items-center justify-center gap-2 self-end rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:bg-white/10 sm:px-4 sm:text-sm lg:inline-flex lg:self-auto" data-theme-toggle aria-label="Switch to light mode">
             <span class="theme-toggle-icon" aria-hidden="true">☀️</span>
             <span class="theme-toggle-text">Light</span>
           </button>

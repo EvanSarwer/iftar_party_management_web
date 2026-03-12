@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: #eef3ef;
+        color: #111827;
+      }
+
+      .invoice-shell {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 32px 20px 48px;
+      }
+
+      .invoice-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 20px;
+      }
+
+      .print-button {
+        border: 0;
+        border-radius: 999px;
+        background: #0f172a;
+        color: #ffffff;
+        padding: 12px 18px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .invoice-card {
+        background: #ffffff;
+        border: 1px solid #d1d5db;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+      }
+
+      .invoice-header {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 28px;
+        background: linear-gradient(135deg, #ecfdf5 0%, #ffffff 55%, #f0fdf4 100%);
+        border-bottom: 1px solid #d1fae5;
+      }
+
+      .invoice-kicker {
+        margin: 0;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: #047857;
+      }
+
+      .invoice-title {
+        margin: 10px 0 0;
+        font-size: 34px;
+        line-height: 1.1;
+      }
+
+      .invoice-meta {
+        min-width: 240px;
+        border: 1px solid #bbf7d0;
+        border-radius: 18px;
+        background: #f0fdf4;
+        padding: 18px;
+      }
+
+      .meta-label {
+        margin: 0;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #065f46;
+      }
+
+      .meta-value {
+        margin: 8px 0 0;
+        font-size: 26px;
+        font-weight: 800;
+        color: #064e3b;
+      }
+
+      .meta-note {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: #4b5563;
+      }
+
+      .invoice-body {
+        padding: 28px;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+
+      .detail-box {
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 16px;
+        background: #f9fafb;
+      }
+
+      .detail-box p {
+        margin: 0;
+      }
+
+      .detail-box .label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+
+      .detail-box .value {
+        margin-top: 8px;
+        font-size: 20px;
+        font-weight: 800;
+      }
+
+      .section {
+        margin-top: 26px;
+      }
+
+      .section-title {
+        margin: 0 0 12px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .main-table {
+        border: 1px solid #d1d5db;
+        border-radius: 18px;
+        overflow: hidden;
+      }
+
+      .main-table thead th {
+        background: #f3f4f6;
+        padding: 14px 16px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #6b7280;
+        text-align: left;
+      }
+
+      .main-table thead th:last-child,
+      .main-table tbody td:last-child,
+      .sub-table td:last-child,
+      .sub-table th:last-child {
+        text-align: right;
+      }
+
+      .main-table tbody td {
+        padding: 16px;
+        border-top: 1px solid #e5e7eb;
+        vertical-align: top;
+      }
+
+      .row-collected {
+        background: #ecfdf5;
+      }
+
+      .row-collected-total {
+        background: #86efac;
+      }
+
+      .row-spent {
+        background: #fff1f2;
+      }
+
+      .row-spent-total {
+        background: #fecdd3;
+      }
+
+      .sub-row td {
+        padding: 0;
+        background: #ffffff;
+      }
+
+      .sub-table-wrap {
+        padding: 14px 16px 18px;
+        background: #fafafa;
+      }
+
+      .sub-table {
+        width: 100%;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+      }
+
+      .sub-table th,
+      .sub-table td {
+        padding: 12px 14px;
+        border-top: 1px solid #e5e7eb;
+        font-size: 14px;
+      }
+
+      .sub-table th {
+        border-top: 0;
+        background: #f9fafb;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #6b7280;
+        text-align: left;
+      }
+
+      .balance-card {
+        margin-top: 26px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        border: 1px solid #a7f3d0;
+        border-radius: 18px;
+        background: #ecfdf5;
+        padding: 18px 20px;
+      }
+
+      .balance-card p {
+        margin: 0;
+      }
+
+      .balance-card .amount {
+        font-size: 28px;
+        font-weight: 800;
+        color: #065f46;
+      }
+
+      @media (max-width: 768px) {
+        .invoice-shell {
+          padding: 20px 14px 32px;
+        }
+
+        .invoice-actions {
+          justify-content: stretch;
+        }
+
+        .print-button {
+          width: 100%;
+        }
+
+        .invoice-header,
+        .balance-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .invoice-header {
+          padding: 20px;
+        }
+
+        .invoice-title {
+          font-size: 28px;
+        }
+
+        .invoice-meta {
+          min-width: 0;
+          width: 100%;
+        }
+
+        .invoice-body {
+          padding: 20px;
+        }
+
+        .detail-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .main-table thead,
+        .sub-table thead {
+          display: none;
+        }
+
+        .main-table,
+        .main-table tbody,
+        .main-table tr,
+        .main-table td,
+        .sub-table,
+        .sub-table tbody,
+        .sub-table tr,
+        .sub-table td {
+          display: block;
+          width: 100%;
+        }
+
+        .main-table tbody td,
+        .sub-table td {
+          display: flex;
+          justify-content: space-between;
+          gap: 12px;
+          text-align: right;
+        }
+
+        .main-table tbody td::before,
+        .sub-table td::before {
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #6b7280;
+        }
+
+        .main-table tbody tr td:nth-child(1)::before {
+          content: 'Item';
+        }
+
+        .main-table tbody tr td:nth-child(2)::before {
+          content: 'Count';
+        }
+
+        .main-table tbody tr td:nth-child(3)::before {
+          content: 'Amount';
+        }
+
+        .sub-table tr td:nth-child(1)::before {
+          content: 'Detail';
+        }
+
+        .sub-table tr td:nth-child(2)::before {
+          content: 'Reference';
+        }
+
+        .sub-table tr td:nth-child(3)::before,
+        .sub-table tr td:nth-child(4)::before {
+          content: 'Amount';
+        }
+      }
+
+      @media print {
+        body {
+          background: #ffffff;
+        }
+
+        .invoice-shell {
+          max-width: none;
+          padding: 0;
+        }
+
+        .invoice-actions {
+          display: none;
+        }
+
+        .invoice-card {
+          border: 0;
+          border-radius: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="invoice-shell">
+      <div class="invoice-actions">
+        <button type="button" class="print-button" onclick="window.print()">Download / Print Invoice</button>
+      </div>
+
+      <div class="invoice-card">
+        <div class="invoice-header">
+          <div>
+            <p class="invoice-kicker">CBA14 Iftar Gathering 2026</p>
+            <h1 class="invoice-title">Finance Invoice</h1>
+            <p style="margin: 12px 0 0; color: #4b5563; max-width: 560px; line-height: 1.7;">
+              Simple invoice report with main categories and subcategory details for collection and spending.
+            </p>
+          </div>
+
+          <div class="invoice-meta">
+            <p class="meta-label">Remaining Balance</p>
+            <p class="meta-value"><%= formatMoney(finance.remainingBalance) %> <%= event.currency %></p>
+            <p class="meta-note">Updated on <%= todayLabel %></p>
+          </div>
+        </div>
+
+        <div class="invoice-body">
+          <div class="detail-grid">
+            <div class="detail-box">
+              <p class="label">Confirmed Members</p>
+              <p class="value"><%= counts.confirmed %></p>
+            </div>
+            <div class="detail-box">
+              <p class="label">Event Contribution</p>
+              <p class="value"><%= formatMoney(finance.contributionAmount) %> <%= event.currency %></p>
+            </div>
+            <div class="detail-box">
+              <p class="label">Venue</p>
+              <p class="value" style="font-size: 18px;"><%= event.venue %></p>
+            </div>
+          </div>
+
+          <div class="section">
+            <p class="section-title">Invoice Summary</p>
+            <table class="main-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Count</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="row-collected">
+                  <td>Confirmed member contribution</td>
+                  <td><%= finance.confirmedCount %> person</td>
+                  <td><%= formatMoney(finance.memberContributionTotal) %></td>
+                </tr>
+
+                <tr class="row-collected">
+                  <td>Total donation received</td>
+                  <td><%= finance.donations.length %> entry</td>
+                  <td><%= formatMoney(finance.donationsTotal) %></td>
+                </tr>
+                <% if (finance.donations.length) { %>
+                  <tr class="sub-row">
+                    <td colspan="3">
+                      <div class="sub-table-wrap">
+                        <table class="sub-table">
+                          <thead>
+                            <tr>
+                              <th>Donor</th>
+                              <th>Contact / Date</th>
+                              <th>Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% finance.donations.forEach((donation) => { %>
+                              <tr>
+                                <td><%= donation.donorName %></td>
+                                <td><%= donation.donorPhone %> | <%= new Date(donation.createdAt).toLocaleDateString() %></td>
+                                <td><%= formatMoney(donation.amount) %></td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                <% } %>
+
+                <tr class="row-collected-total">
+                  <td>Total collected</td>
+                  <td>Combined</td>
+                  <td><%= formatMoney(finance.collectionTotal) %></td>
+                </tr>
+
+                <tr class="row-spent">
+                  <td>Per-person expenses</td>
+                  <td><%= finance.perPersonExpenses.length %> item</td>
+                  <td><%= formatMoney(finance.perPersonExpenseTotal) %></td>
+                </tr>
+                <% if (finance.perPersonExpenses.length) { %>
+                  <tr class="sub-row">
+                    <td colspan="3">
+                      <div class="sub-table-wrap">
+                        <table class="sub-table">
+                          <thead>
+                            <tr>
+                              <th>Item</th>
+                              <th>Rate / Count</th>
+                              <th>Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% finance.perPersonExpenses.forEach((item) => { %>
+                              <tr>
+                                <td><%= item.itemName %></td>
+                                <td><%= formatMoney(item.amountPerPerson) %> x <%= finance.confirmedCount %> person</td>
+                                <td><%= formatMoney(item.totalAmount) %></td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                <% } %>
+
+                <tr class="row-spent">
+                  <td>Direct expenses</td>
+                  <td><%= finance.generalExpenses.length %> item</td>
+                  <td><%= formatMoney(finance.generalExpenseTotal) %></td>
+                </tr>
+                <% if (finance.generalExpenses.length) { %>
+                  <tr class="sub-row">
+                    <td colspan="3">
+                      <div class="sub-table-wrap">
+                        <table class="sub-table">
+                          <thead>
+                            <tr>
+                              <th>Expense</th>
+                              <th>Date</th>
+                              <th>Amount</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% finance.generalExpenses.forEach((item) => { %>
+                              <tr>
+                                <td><%= item.title %></td>
+                                <td><%= new Date(item.createdAt).toLocaleDateString() %></td>
+                                <td><%= formatMoney(item.amount) %></td>
+                              </tr>
+                            <% }) %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </td>
+                  </tr>
+                <% } %>
+
+                <tr class="row-spent-total">
+                  <td>Total spent</td>
+                  <td>Combined</td>
+                  <td><%= formatMoney(finance.spentTotal) %></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="balance-card">
+            <div>
+              <p class="meta-label">Final Balance</p>
+              <p style="margin-top: 6px; color: #4b5563;">Total collected minus total spent</p>
+            </div>
+            <p class="amount"><%= formatMoney(finance.remainingBalance) %> <%= event.currency %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

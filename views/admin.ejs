@@ -18,252 +18,639 @@
       </form>
     </div>
   <% } else { %>
-    <div class="grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
-      <div class="space-y-8">
-        <div class="glass-panel rounded-[2rem] p-8">
-          <div class="flex items-start justify-between gap-4">
-            <div>
-              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Dashboard</p>
-              <h2 class="mt-3 text-3xl font-extrabold text-white">Admin controls</h2>
-            </div>
-            <form action="/admin/logout" method="post">
-              <button type="submit" class="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10">Logout</button>
-            </form>
+    <div class="space-y-8">
+      <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+        <div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Dashboard</p>
+            <h2 class="mt-3 text-3xl font-extrabold text-white">Admin controls</h2>
+            <p class="mt-3 max-w-2xl text-sm leading-7 text-slate-300">Manage attendance, track approvals, and control the event finance ledger from one place.</p>
           </div>
-
-          <div class="mt-8 grid gap-4 sm:grid-cols-3">
-            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
-              <p class="text-sm text-slate-400">Total</p>
-              <p class="mt-2 text-3xl font-extrabold text-white"><%= attendees.length %></p>
-            </div>
-            <div class="rounded-3xl border border-emerald-400/10 bg-emerald-500/10 p-5">
-              <p class="text-sm text-slate-400">Confirmed</p>
-              <p class="mt-2 text-3xl font-extrabold text-emerald-300"><%= confirmedAttendees.length %></p>
-            </div>
-            <div class="rounded-3xl border border-amber-400/10 bg-amber-500/10 p-5">
-              <p class="text-sm text-slate-400">Pending</p>
-              <p class="mt-2 text-3xl font-extrabold text-amber-300"><%= pendingAttendees.length %></p>
-            </div>
-          </div>
-        </div>
-
-        <% if (adminMessage) { %>
-          <div class="rounded-[2rem] border border-brand-400/20 bg-brand-500/10 px-6 py-4 text-sm font-semibold text-brand-200">
-            <%= adminMessage %>
-          </div>
-        <% } %>
-
-        <div class="glass-panel rounded-[2rem] p-8">
-          <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-200 sm:text-xs sm:tracking-[0.35em]">Join the Gathering</p>
-          <h3 class="mt-3 text-2xl font-extrabold text-white sm:text-3xl">Add your name to the attendee list</h3>
-          <p class="mt-3 text-sm leading-7 text-slate-300">
-            Submit your name and mobile number. Your request will appear as pending until the admin confirms your joining.
-          </p>
-          <form class="mt-6 space-y-4" data-attendee-form>
-            <div>
-              <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-name">Full name</label>
-              <input id="admin-name" name="name" type="text" placeholder="Enter your name" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
-            </div>
-            <div>
-              <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-phone">Mobile number</label>
-              <input id="admin-phone" name="phone" type="text" placeholder="01XXXXXXXXX" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
-            </div>
-            <button type="submit" class="w-full rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Submit as Pending</button>
-            <p data-attendee-message class="mt-4 text-sm text-slate-400">Your status will be visible in the list below after submission.</p>
+          <form action="/admin/logout" method="post">
+            <button type="submit" class="rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-white/10">Logout</button>
           </form>
         </div>
 
-        <div class="glass-panel rounded-[2rem] p-8">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Pending Requests</p>
-              <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">Confirm classmates from the waiting list</h3>
-            </div>
-            <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <div class="w-full lg:w-72">
-                <input type="text" data-admin-search="pending" placeholder="Search pending by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
-              </div>
-              <span class="rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-300"><%= pendingAttendees.length %> pending</span>
-            </div>
+        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+          <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+            <p class="text-sm text-slate-400">Total</p>
+            <p class="mt-2 text-3xl font-extrabold text-white"><%= attendees.length %></p>
           </div>
-
-          <div class="mt-6 space-y-4">
-            <% if (!pendingAttendees.length) { %>
-              <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee right now.</div>
-            <% } %>
-
-            <div data-admin-empty="pending" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee found with this name.</div>
-
-            <% pendingAttendees.forEach((attendee) => { %>
-              <div data-admin-item="pending" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
-                  <div class="grid gap-3 md:grid-cols-2">
-                    <div>
-                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
-                      <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
-                    </div>
-                    <div>
-                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
-                      <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
-                    </div>
-                  </div>
-
-                  <p class="text-xs text-slate-500">Requested on <%= new Date(attendee.createdAt).toLocaleString() %></p>
-                  <div class="mt-3">
-                    <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
-                  </div>
-                </form>
-                <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-                  <form action="/admin/confirm/<%= attendee.id %>" method="post">
-                    <button type="submit" class="w-full rounded-2xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-400">Confirm</button>
-                  </form>
-                  <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
-                    <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
-                  </form>
-                </div>
-              </div>
-            <% }) %>
+          <div class="rounded-3xl border border-emerald-400/10 bg-emerald-500/10 p-5">
+            <p class="text-sm text-slate-400">Confirmed</p>
+            <p class="mt-2 text-3xl font-extrabold text-emerald-300"><%= confirmedAttendees.length %></p>
+          </div>
+          <div class="rounded-3xl border border-amber-400/10 bg-amber-500/10 p-5">
+            <p class="text-sm text-slate-400">Pending</p>
+            <p class="mt-2 text-3xl font-extrabold text-amber-300"><%= pendingAttendees.length %></p>
           </div>
         </div>
       </div>
 
-      <div class="space-y-8">
-        <div class="glass-panel rounded-[2rem] p-8">
-          <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Today's Join Card</p>
-              <h3 class="mt-3 text-2xl font-extrabold text-white">Shareable Ramadan attendance card</h3>
-              <p class="mt-2 text-sm text-slate-300">Download this card and share it with classmates on WhatsApp or social media.</p>
+      <% if (adminMessage) { %>
+        <div class="rounded-[2rem] border border-brand-400/20 bg-brand-500/10 px-6 py-4 text-sm font-semibold text-brand-200">
+          <%= adminMessage %>
+        </div>
+      <% } %>
+
+      <div class="glass-panel rounded-[2rem] p-4 sm:p-5">
+        <div class="grid gap-3 sm:grid-cols-2" data-admin-tabs data-default-admin-tab="<%= currentAdminTab %>">
+          <button type="button" data-admin-tab-button="attendance" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold transition <%= currentAdminTab === 'finance' ? 'bg-white/5 text-slate-300 hover:bg-white/10' : 'bg-brand-500 text-slate-950' %>">
+            Attendance Control
+          </button>
+          <button type="button" data-admin-tab-button="finance" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold transition <%= currentAdminTab === 'finance' ? 'bg-brand-500 text-slate-950' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>">
+            Finance Ledger
+          </button>
+        </div>
+      </div>
+
+      <div data-admin-tab-panel="attendance" class="space-y-8 <%= currentAdminTab === 'finance' ? 'hidden' : '' %>">
+        <div class="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
+          <div class="space-y-8">
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-200 sm:text-xs sm:tracking-[0.35em]">Join the Gathering</p>
+              <h3 class="mt-3 text-2xl font-extrabold text-white sm:text-3xl">Add your name to the attendee list</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-300">
+                Submit your name and mobile number. Your request will appear as pending until the admin confirms your joining.
+              </p>
+              <form class="mt-6 space-y-4" data-attendee-form>
+                <div>
+                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-name">Full name</label>
+                  <input id="admin-name" name="name" type="text" placeholder="Enter your name" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
+                </div>
+                <div>
+                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-phone">Mobile number</label>
+                  <input id="admin-phone" name="phone" type="text" placeholder="01XXXXXXXXX" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
+                </div>
+                <button type="submit" class="w-full rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Submit as Pending</button>
+                <p data-attendee-message class="mt-4 text-sm text-slate-400">Your status will be visible in the list below after submission.</p>
+              </form>
             </div>
-            <button type="button" data-download-card class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-brand-400">
-              Download Card
-            </button>
+
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Pending Requests</p>
+                  <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">Confirm classmates from the waiting list</h3>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <div class="w-full lg:w-72">
+                    <input type="text" data-admin-search="pending" placeholder="Search pending by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                  </div>
+                  <span class="rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-300"><%= pendingAttendees.length %> pending</span>
+                </div>
+              </div>
+
+              <div class="mt-6 space-y-4">
+                <% if (!pendingAttendees.length) { %>
+                  <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee right now.</div>
+                <% } %>
+
+                <div data-admin-empty="pending" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No pending attendee found with this name.</div>
+
+                <% pendingAttendees.forEach((attendee) => { %>
+                  <div data-admin-item="pending" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                    <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
+                      <div class="grid gap-3 md:grid-cols-2">
+                        <div>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                          <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                        </div>
+                        <div>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
+                          <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                        </div>
+                      </div>
+
+                      <p class="text-xs text-slate-500">Requested on <%= new Date(attendee.createdAt).toLocaleString() %></p>
+                      <div class="mt-3">
+                        <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                      </div>
+                    </form>
+                    <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                      <form action="/admin/confirm/<%= attendee.id %>" method="post">
+                        <button type="submit" class="w-full rounded-2xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-400">Confirm</button>
+                      </form>
+                      <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
+                        <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                      </form>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
           </div>
 
-          <div class="mt-6 share-card-wrapper">
-            <div class="share-iftar-card" data-share-card>
-              <div class="share-iftar-card__pattern"></div>
-              <div class="share-iftar-card__orbit share-iftar-card__orbit--one"></div>
-              <div class="share-iftar-card__orbit share-iftar-card__orbit--two"></div>
-
-              <div class="relative z-10 flex h-full flex-col">
-                <div class="flex items-start justify-between gap-4">
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.45em] text-brand-200">Batch CBA14</p>
-                    <h4 class="mt-3 text-3xl font-extrabold text-white sm:text-4xl">Iftar & Eid Vibes</h4>
-                    <p class="mt-3 max-w-xl text-sm leading-7 text-slate-200">
-                      Alhamdulillah, these friends confirmed today for our blessed Ramadan gathering.
-                    </p>
-                  </div>
-                  <div class="share-iftar-card__crescent">🌙</div>
+          <div class="space-y-8">
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Today's Join Card</p>
+                  <h3 class="mt-3 text-2xl font-extrabold text-white">Shareable Ramadan attendance card</h3>
+                  <p class="mt-2 text-sm text-slate-300">Download this card and share it with classmates on WhatsApp or social media.</p>
                 </div>
+                <button type="button" data-download-card class="inline-flex items-center justify-center rounded-full bg-brand-500 px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-brand-400">
+                  Download Card
+                </button>
+              </div>
 
-                <div class="mt-8 grid gap-4 sm:grid-cols-[0.9fr_1.1fr]">
-                  <div class="rounded-[1.5rem] border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
-                    <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Event Date</p>
-                    <p class="mt-3 text-lg font-bold text-white"><%= event.dateLabel %></p>
+              <div class="mt-6 share-card-wrapper">
+                <div class="share-iftar-card" data-share-card>
+                  <div class="share-iftar-card__pattern"></div>
+                  <div class="share-iftar-card__orbit share-iftar-card__orbit--one"></div>
+                  <div class="share-iftar-card__orbit share-iftar-card__orbit--two"></div>
 
-                    <p class="mt-6 text-xs uppercase tracking-[0.35em] text-brand-200">Venue</p>
-                    <p class="mt-3 text-sm leading-7 text-slate-200"><%= event.venue %></p>
-
-                    <div class="mt-6 rounded-2xl bg-emerald-500/15 px-4 py-4 text-center">
-                      <p class="text-xs uppercase tracking-[0.25em] text-emerald-200">Confirmed Today</p>
-                      <p class="mt-2 text-4xl font-extrabold text-white"><%= todayConfirmed.length %></p>
-                    </div>
-                  </div>
-
-                  <div class="rounded-[1.5rem] border border-white/15 bg-slate-950/35 p-5 backdrop-blur-sm">
-                    <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                  <div class="relative z-10 flex h-full flex-col">
+                    <div class="flex items-start justify-between gap-4">
                       <div>
-                        <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Attendance Highlight</p>
-                        <p class="mt-2 text-lg font-bold text-white"><%= new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                        <p class="text-xs font-bold uppercase tracking-[0.45em] text-brand-200">Batch CBA14</p>
+                        <h4 class="mt-3 text-3xl font-extrabold text-white sm:text-4xl">Iftar & Eid Vibes</h4>
+                        <p class="mt-3 max-w-xl text-sm leading-7 text-slate-200">
+                          Alhamdulillah, these friends confirmed today for our blessed Ramadan gathering.
+                        </p>
                       </div>
-                      <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-100">Ramadan 2026</span>
+                      <div class="share-iftar-card__crescent">🌙</div>
                     </div>
 
-                    <div class="mt-5 space-y-3">
-                      <% if (!todayConfirmed.length) { %>
-                        <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-8 text-center text-slate-300">
-                          No new confirmation today yet. InshaAllah, more friends will join soon.
-                        </div>
-                      <% } %>
+                    <div class="mt-8 grid gap-4 sm:grid-cols-[0.9fr_1.1fr]">
+                      <div class="rounded-[1.5rem] border border-white/15 bg-white/10 p-5 backdrop-blur-sm">
+                        <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Event Date</p>
+                        <p class="mt-3 text-lg font-bold text-white"><%= event.dateLabel %></p>
 
-                      <% todayConfirmed.forEach((attendee, index) => { %>
-                        <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3">
-                          <div class="flex items-center gap-3">
-                            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 font-bold text-slate-950"><%= index + 1 %></span>
-                            <div>
-                              <p class="font-bold text-white"><%= attendee.name %></p>
-                              <p class="text-xs text-slate-300"><%= attendee.phone %></p>
-                            </div>
-                          </div>
-                          <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-200">Joined Today</span>
+                        <p class="mt-6 text-xs uppercase tracking-[0.35em] text-brand-200">Venue</p>
+                        <p class="mt-3 text-sm leading-7 text-slate-200"><%= event.venue %></p>
+
+                        <div class="mt-6 rounded-2xl bg-emerald-500/15 px-4 py-4 text-center">
+                          <p class="text-xs uppercase tracking-[0.25em] text-emerald-200">Confirmed Today</p>
+                          <p class="mt-2 text-4xl font-extrabold text-white"><%= todayConfirmed.length %></p>
                         </div>
-                      <% }) %>
+                      </div>
+
+                      <div class="rounded-[1.5rem] border border-white/15 bg-slate-950/35 p-5 backdrop-blur-sm">
+                        <div class="flex items-center justify-between gap-3 border-b border-white/10 pb-4">
+                          <div>
+                            <p class="text-xs uppercase tracking-[0.35em] text-brand-200">Attendance Highlight</p>
+                            <p class="mt-2 text-lg font-bold text-white"><%= new Date().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                          </div>
+                          <span class="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-slate-100">Ramadan 2026</span>
+                        </div>
+
+                        <div class="mt-5 space-y-3">
+                          <% if (!todayConfirmed.length) { %>
+                            <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 px-4 py-8 text-center text-slate-300">
+                              No new confirmation today yet. InshaAllah, more friends will join soon.
+                            </div>
+                          <% } %>
+
+                          <% todayConfirmed.forEach((attendee, index) => { %>
+                            <div class="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/10 px-4 py-3">
+                              <div class="flex items-center gap-3">
+                                <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-500 font-bold text-slate-950"><%= index + 1 %></span>
+                                <div>
+                                  <p class="font-bold text-white"><%= attendee.name %></p>
+                                  <p class="text-xs text-slate-300"><%= attendee.phone %></p>
+                                </div>
+                              </div>
+                              <span class="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-bold text-emerald-200">Joined Today</span>
+                            </div>
+                          <% }) %>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
+                      <p>Contribution: <span class="font-bold text-brand-200"><%= event.contribution %> <%= event.currency %></span></p>
+                      <p>May Allah bless our reunion with joy, unity, and barakah.</p>
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
 
-                <div class="mt-6 flex flex-col gap-3 border-t border-white/10 pt-5 text-sm text-slate-200 sm:flex-row sm:items-center sm:justify-between">
-                  <p>Contribution: <span class="font-bold text-brand-200"><%= event.contribution %> <%= event.currency %></span></p>
-                  <p>May Allah bless our reunion with joy, unity, and barakah.</p>
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Confirmed List</p>
+                  <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">All approved attendees</h3>
                 </div>
+                <div class="w-full lg:w-72">
+                  <input type="text" data-admin-search="confirmed" placeholder="Search confirmed by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                </div>
+              </div>
+              <div class="mt-6 space-y-3">
+                <% if (!confirmedAttendees.length) { %>
+                  <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee yet.</div>
+                <% } %>
+
+                <div data-admin-empty="confirmed" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee found with this name.</div>
+
+                <% confirmedAttendees.forEach((attendee) => { %>
+                  <div data-admin-item="confirmed" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                    <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
+                      <div class="grid gap-3 md:grid-cols-2">
+                        <div>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                          <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                        </div>
+                        <div>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
+                          <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                        </div>
+                      </div>
+
+                      <div class="flex flex-wrap items-center gap-3">
+                        <span class="status-badge status-confirmed">✓ confirmed</span>
+                        <span class="text-xs text-slate-500">
+                          Confirmed on <%= attendee.confirmedAt ? new Date(attendee.confirmedAt).toLocaleString() : '—' %>
+                        </span>
+                      </div>
+                      <div class="mt-3">
+                        <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                      </div>
+                    </form>
+                    <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+                      <form action="/admin/pending/<%= attendee.id %>" method="post">
+                        <button type="submit" class="w-full rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400">Pending</button>
+                      </form>
+                      <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
+                        <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                      </form>
+                    </div>
+                  </div>
+                <% }) %>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="glass-panel rounded-[2rem] p-8">
-          <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+      <div data-admin-tab-panel="finance" class="space-y-8 <%= currentAdminTab === 'finance' ? '' : 'hidden' %>">
+        <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+          <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div>
-              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Confirmed List</p>
-              <h3 class="mt-3 text-xl font-extrabold text-white sm:text-2xl">All approved attendees</h3>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Finance Overview</p>
+              <h3 class="mt-3 text-3xl font-extrabold text-white">Collection, spending, and live balance</h3>
+              <p class="mt-3 max-w-3xl text-sm leading-7 text-slate-300">
+                Every confirmed member contributes <%= formatMoney(finance.contributionAmount) %> <%= event.currency %>. Donations and expense items below update the running balance automatically.
+              </p>
             </div>
-            <div class="w-full lg:w-72">
-              <input type="text" data-admin-search="confirmed" placeholder="Search confirmed by name" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+            <div class="rounded-3xl border border-emerald-400/20 bg-emerald-500/10 px-5 py-4 text-right">
+              <p class="text-xs font-semibold uppercase tracking-[0.2em] text-emerald-200">Remaining Balance</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= formatMoney(finance.remainingBalance) %> <%= event.currency %></p>
             </div>
           </div>
-          <div class="mt-6 space-y-3">
-            <% if (!confirmedAttendees.length) { %>
-              <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee yet.</div>
-            <% } %>
 
-            <div data-admin-empty="confirmed" class="hidden rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No confirmed attendee found with this name.</div>
+          <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5">
+              <p class="text-sm text-slate-400">Confirmed member credit</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= formatMoney(finance.memberContributionTotal) %></p>
+              <p class="mt-2 text-xs text-slate-500"><%= finance.confirmedCount %> confirmed x <%= formatMoney(finance.contributionAmount) %> <%= event.currency %></p>
+            </div>
+            <div class="rounded-3xl border border-sky-400/20 bg-sky-500/10 p-5">
+              <p class="text-sm text-slate-400">Donation total</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= formatMoney(finance.donationsTotal) %></p>
+              <p class="mt-2 text-xs text-slate-500"><%= finance.donations.length %> donation entries</p>
+            </div>
+            <div class="rounded-3xl border border-brand-400/20 bg-brand-500/10 p-5">
+              <p class="text-sm text-slate-400">Total collection</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= formatMoney(finance.collectionTotal) %></p>
+              <p class="mt-2 text-xs text-slate-500">All credit sources combined</p>
+            </div>
+            <div class="rounded-3xl border border-rose-400/20 bg-rose-500/10 p-5">
+              <p class="text-sm text-slate-400">Total spent</p>
+              <p class="mt-2 text-3xl font-extrabold text-white"><%= formatMoney(finance.spentTotal) %></p>
+              <p class="mt-2 text-xs text-slate-500">Per-person items and direct spending</p>
+            </div>
+          </div>
 
-            <% confirmedAttendees.forEach((attendee) => { %>
-              <div data-admin-item="confirmed" data-name="<%= attendee.name.toLowerCase() %>" class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
-                <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
-                  <div class="grid gap-3 md:grid-cols-2">
-                    <div>
-                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
-                      <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
-                    </div>
-                    <div>
-                      <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
-                      <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
-                    </div>
-                  </div>
+          <div class="mt-8 grid gap-4 md:grid-cols-3">
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Per-person spent</p>
+              <p class="mt-2 text-2xl font-extrabold text-white"><%= formatMoney(finance.perPersonExpenseTotal) %> <%= event.currency %></p>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Other spent</p>
+              <p class="mt-2 text-2xl font-extrabold text-white"><%= formatMoney(finance.generalExpenseTotal) %> <%= event.currency %></p>
+            </div>
+            <div class="rounded-3xl border border-white/10 bg-white/[0.04] p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.25em] text-slate-400">Currency</p>
+              <p class="mt-2 text-2xl font-extrabold text-white"><%= event.currency %></p>
+            </div>
+          </div>
+        </div>
 
-                  <div class="flex flex-wrap items-center gap-3">
-                    <span class="status-badge status-confirmed">✓ confirmed</span>
-                    <span class="text-xs text-slate-500">
-                      Confirmed on <%= attendee.confirmedAt ? new Date(attendee.confirmedAt).toLocaleString() : '—' %>
-                    </span>
-                  </div>
-                  <div class="mt-3">
-                    <button type="submit" class="rounded-2xl border border-white/10 px-4 py-2.5 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
-                  </div>
-                </form>
-                <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-                  <form action="/admin/pending/<%= attendee.id %>" method="post">
-                    <button type="submit" class="w-full rounded-2xl bg-amber-500 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-amber-400">Pending</button>
-                  </form>
-                  <form action="/admin/delete/<%= attendee.id %>" method="post" onsubmit="return confirm('Delete this attendee?')">
-                    <button type="submit" class="w-full rounded-2xl bg-rose-500 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
-                  </form>
-                </div>
+        <div class="glass-panel rounded-[2rem] p-5 sm:p-10">
+          <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Invoice Summary</p>
+              <h3 class="mt-3 text-2xl font-extrabold text-white">Payment sheet</h3>
+            </div>
+            <a href="/calculation/invoice" target="_blank" rel="noreferrer" class="inline-flex items-center justify-center rounded-full bg-emerald-300 px-5 py-3 text-sm font-bold text-emerald-950 transition hover:bg-emerald-200 sm:self-start">
+              Download Simple Invoice
+            </a>
+          </div>
+
+          <div class="mt-6 overflow-hidden rounded-[1.75rem] border border-white/10 bg-slate-950/40">
+            <div class="invoice-mobile-header grid gap-4 border-b border-white/10 bg-white/5 px-5 py-4 text-xs font-bold uppercase tracking-[0.2em] text-slate-400 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+              <span>Item</span>
+              <span>Count</span>
+              <span class="text-right">Amount</span>
+            </div>
+
+            <div class="space-y-1 px-3 py-3 text-sm text-slate-200">
+              <div class="invoice-stack gap-4 rounded-2xl border border-emerald-700/40 bg-emerald-950/45 px-3 py-3 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                <span data-cell-label="Item">Confirmed member contribution</span>
+                <span data-cell-label="Count"><span class="invoice-cell-value"><%= finance.confirmedCount %> person</span></span>
+                <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.memberContributionTotal) %></span></span>
               </div>
-            <% }) %>
+
+              <% if (finance.donations.length) { %>
+                <details class="group rounded-2xl border border-emerald-700/40 bg-emerald-950/45 px-2 py-1">
+                  <summary class="invoice-stack cursor-pointer gap-4 list-none rounded-2xl px-1 py-2 outline-none marker:hidden sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                    <span data-cell-label="Item" class="flex items-center gap-2">
+                      <span>Total donation received</span>
+                      <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs text-white transition group-open:rotate-180">⌄</span>
+                    </span>
+                    <span data-cell-label="Count"><span class="invoice-cell-value"><%= finance.donations.length %> entry</span></span>
+                    <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.donationsTotal) %></span></span>
+                  </summary>
+
+                  <div class="mb-2 mt-2 overflow-hidden rounded-2xl border border-emerald-300/10 bg-slate-950/35">
+                    <div class="invoice-mobile-header grid gap-3 border-b border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-emerald-100/80 sm:grid-cols-[1.15fr_0.95fr_0.7fr]">
+                      <span>Donor</span>
+                      <span>Contact / Date</span>
+                      <span class="text-right">Amount</span>
+                    </div>
+                    <div class="space-y-2 p-3">
+                      <% finance.donations.forEach((donation) => { %>
+                        <div class="invoice-stack gap-3 rounded-2xl bg-white/[0.04] px-4 py-3 text-xs text-slate-200 sm:grid-cols-[1.15fr_0.95fr_0.7fr] sm:text-sm">
+                          <div data-cell-label="Donor">
+                            <p class="font-semibold text-white"><%= donation.donorName %></p>
+                            <p class="mt-1 text-xs text-slate-500">Donation source</p>
+                          </div>
+                          <div data-cell-label="Contact / Date">
+                            <p class="text-slate-300"><%= donation.donorPhone %></p>
+                            <p class="mt-1 text-xs text-slate-500"><%= new Date(donation.createdAt).toLocaleDateString() %></p>
+                          </div>
+                          <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(donation.amount) %></span></span>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                </details>
+              <% } else { %>
+                <div class="invoice-stack gap-4 rounded-2xl border border-emerald-700/40 bg-emerald-950/45 px-3 py-3 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                  <span data-cell-label="Item">Total donation received</span>
+                  <span data-cell-label="Count"><span class="invoice-cell-value">0 entry</span></span>
+                  <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.donationsTotal) %></span></span>
+                </div>
+              <% } %>
+
+              <div class="invoice-stack gap-4 rounded-2xl border border-emerald-200/70 bg-emerald-300 px-3 py-3 shadow-lg shadow-emerald-900/20 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                <span data-cell-label="Item" class="font-semibold text-emerald-950">Total collected</span>
+                <span data-cell-label="Count"><span class="invoice-cell-value text-emerald-900">Combined</span></span>
+                <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-emerald-950"><%= formatMoney(finance.collectionTotal) %></span></span>
+              </div>
+
+              <div class="my-3 flex items-center gap-3 px-1" aria-hidden="true">
+                <div class="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-rose-300/30"></div>
+                <span class="text-[10px] font-bold uppercase tracking-[0.28em] text-slate-500">Spending</span>
+                <div class="h-px flex-1 bg-gradient-to-r from-rose-300/30 via-white/20 to-transparent"></div>
+              </div>
+
+              <% if (finance.perPersonExpenses.length) { %>
+                <details class="group rounded-2xl border border-rose-700/40 bg-rose-950/45 px-2 py-1">
+                  <summary class="invoice-stack cursor-pointer gap-4 list-none rounded-2xl px-1 py-2 outline-none marker:hidden sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                    <span data-cell-label="Item" class="flex items-center gap-2">
+                      <span>Per-person expenses</span>
+                      <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs text-white transition group-open:rotate-180">⌄</span>
+                    </span>
+                    <span data-cell-label="Count"><span class="invoice-cell-value"><%= finance.perPersonExpenses.length %> item</span></span>
+                    <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.perPersonExpenseTotal) %></span></span>
+                  </summary>
+
+                  <div class="mb-2 mt-2 overflow-hidden rounded-2xl border border-rose-300/10 bg-slate-950/35">
+                    <div class="invoice-mobile-header grid gap-3 border-b border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-rose-100/80 sm:grid-cols-[1.1fr_0.95fr_0.95fr_0.7fr]">
+                      <span>Item</span>
+                      <span>Rate</span>
+                      <span>Count</span>
+                      <span class="text-right">Total</span>
+                    </div>
+                    <div class="space-y-2 p-3">
+                      <% finance.perPersonExpenses.forEach((item) => { %>
+                        <div class="invoice-stack gap-3 rounded-2xl bg-white/[0.04] px-4 py-3 text-xs text-slate-200 sm:grid-cols-[1.1fr_0.95fr_0.95fr_0.7fr] sm:text-sm">
+                          <div data-cell-label="Item">
+                            <p class="font-semibold text-white"><%= item.itemName %></p>
+                            <p class="mt-1 text-xs text-slate-500">Per-person cost item</p>
+                          </div>
+                          <div data-cell-label="Rate">
+                            <p class="text-slate-300"><%= formatMoney(item.amountPerPerson) %> <%= event.currency %></p>
+                            <p class="mt-1 text-xs text-slate-500">Per person</p>
+                          </div>
+                          <div data-cell-label="Count">
+                            <p class="text-slate-300"><%= finance.confirmedCount %> person</p>
+                            <p class="mt-1 text-xs text-slate-500">Confirmed count</p>
+                          </div>
+                          <span data-cell-label="Total"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(item.totalAmount) %></span></span>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                </details>
+              <% } else { %>
+                <div class="invoice-stack gap-4 rounded-2xl border border-rose-700/40 bg-rose-950/45 px-3 py-3 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                  <span data-cell-label="Item">Per-person expenses</span>
+                  <span data-cell-label="Count"><span class="invoice-cell-value">0 item</span></span>
+                  <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.perPersonExpenseTotal) %></span></span>
+                </div>
+              <% } %>
+
+              <% if (finance.generalExpenses.length) { %>
+                <details class="group rounded-2xl border border-rose-700/40 bg-rose-950/45 px-2 py-1">
+                  <summary class="invoice-stack cursor-pointer gap-4 list-none rounded-2xl px-1 py-2 outline-none marker:hidden sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                    <span data-cell-label="Item" class="flex items-center gap-2">
+                      <span>Direct expenses</span>
+                      <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 text-xs text-white transition group-open:rotate-180">⌄</span>
+                    </span>
+                    <span data-cell-label="Count"><span class="invoice-cell-value"><%= finance.generalExpenses.length %> item</span></span>
+                    <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.generalExpenseTotal) %></span></span>
+                  </summary>
+
+                  <div class="mb-2 mt-2 overflow-hidden rounded-2xl border border-rose-300/10 bg-slate-950/35">
+                    <div class="invoice-mobile-header grid gap-3 border-b border-white/10 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-rose-100/80 sm:grid-cols-[1.2fr_0.95fr_0.65fr]">
+                      <span>Expense</span>
+                      <span>Reference</span>
+                      <span class="text-right">Amount</span>
+                    </div>
+                    <div class="space-y-2 p-3">
+                      <% finance.generalExpenses.forEach((item) => { %>
+                        <div class="invoice-stack gap-3 rounded-2xl bg-white/[0.04] px-4 py-3 text-xs text-slate-200 sm:grid-cols-[1.2fr_0.95fr_0.65fr] sm:text-sm">
+                          <div data-cell-label="Expense">
+                            <p class="font-semibold text-white"><%= item.title %></p>
+                            <p class="mt-1 text-xs text-slate-500">Direct expense entry</p>
+                          </div>
+                          <div data-cell-label="Reference">
+                            <p class="text-slate-300">Expense item</p>
+                            <p class="mt-1 text-xs text-slate-500"><%= new Date(item.createdAt).toLocaleDateString() %></p>
+                          </div>
+                          <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(item.amount) %></span></span>
+                        </div>
+                      <% }) %>
+                    </div>
+                  </div>
+                </details>
+              <% } else { %>
+                <div class="invoice-stack gap-4 rounded-2xl border border-rose-700/40 bg-rose-950/45 px-3 py-3 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                  <span data-cell-label="Item">Direct expenses</span>
+                  <span data-cell-label="Count"><span class="invoice-cell-value">0 item</span></span>
+                  <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.generalExpenseTotal) %></span></span>
+                </div>
+              <% } %>
+
+              <div class="invoice-stack gap-4 rounded-2xl border border-rose-300/20 bg-gradient-to-r from-rose-500/20 to-rose-400/10 px-3 py-3 shadow-lg shadow-rose-950/10 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+                <span data-cell-label="Item">Total spent</span>
+                <span data-cell-label="Count"><span class="invoice-cell-value">Combined</span></span>
+                <span data-cell-label="Amount"><span class="invoice-cell-value text-right font-bold text-white"><%= formatMoney(finance.spentTotal) %></span></span>
+              </div>
+            </div>
+
+            <div class="invoice-stack gap-4 border-t border-white/10 bg-brand-500/10 px-5 py-5 sm:grid-cols-[1.3fr_0.7fr_0.8fr]">
+              <span data-cell-label="Item" class="text-sm font-bold uppercase tracking-[0.2em] text-brand-100">Balance</span>
+              <span data-cell-label="Count"><span class="invoice-cell-value text-sm text-slate-300">Remaining</span></span>
+              <span data-cell-label="Amount"><span class="invoice-cell-value text-right text-2xl font-extrabold text-white"><%= formatMoney(finance.remainingBalance) %></span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-8 xl:grid-cols-[1.05fr_0.95fr]">
+          <div class="space-y-8">
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Money Add</p>
+                  <h3 class="mt-3 text-2xl font-extrabold text-white">Donation sources</h3>
+                  <p class="mt-2 text-sm text-slate-300">Add outside funding from donors. These values are added on top of confirmed member credit.</p>
+                </div>
+                <div class="rounded-full bg-sky-500/15 px-4 py-2 text-sm font-bold text-sky-200"><%= formatMoney(finance.donationsTotal) %> <%= event.currency %></div>
+              </div>
+
+              <form action="/admin/donations" method="post" class="mt-6 grid gap-4 lg:grid-cols-[1fr_1fr_180px]">
+                <input type="text" name="donorName" placeholder="Donation by name" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <input type="text" name="donorPhone" placeholder="Mobile number" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <div class="flex flex-col gap-3 sm:flex-row">
+                  <input type="number" min="0" step="0.01" name="amount" placeholder="Amount" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                  <button type="submit" class="rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Add</button>
+                </div>
+              </form>
+
+              <div class="mt-6 space-y-4">
+                <% if (!finance.donations.length) { %>
+                  <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No donations added yet.</div>
+                <% } %>
+
+                <% finance.donations.forEach((donation) => { %>
+                  <div class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                    <form action="/admin/donations/<%= donation.id %>/update" method="post" class="grid gap-3 lg:grid-cols-[1fr_1fr_160px_auto]">
+                      <input type="text" name="donorName" value="<%= donation.donorName %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <input type="text" name="donorPhone" value="<%= donation.donorPhone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <input type="number" min="0" step="0.01" name="amount" value="<%= donation.amount %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <div class="flex flex-col gap-2 sm:flex-row">
+                        <button type="submit" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                        <button formaction="/admin/donations/<%= donation.id %>/delete" formmethod="post" onclick="return confirm('Delete this donation?')" class="rounded-2xl bg-rose-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                      </div>
+                    </form>
+                    <div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+                      <span>Added <%= new Date(donation.createdAt).toLocaleString() %></span>
+                      <span><%= formatMoney(donation.amount) %> <%= event.currency %></span>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Money Spent</p>
+                  <h3 class="mt-3 text-2xl font-extrabold text-white">Per-person item costing</h3>
+                  <p class="mt-2 text-sm text-slate-300">Each item amount is multiplied by the current confirmed member count automatically.</p>
+                </div>
+                <div class="rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-200"><%= formatMoney(finance.perPersonExpenseTotal) %> <%= event.currency %></div>
+              </div>
+
+              <form action="/admin/per-person-expenses" method="post" class="mt-6 grid gap-4 lg:grid-cols-[1fr_180px_auto]">
+                <input type="text" name="itemName" placeholder="Item name, e.g. Iftar platter" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <input type="number" min="0" step="0.01" name="amountPerPerson" placeholder="Amount per person" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <button type="submit" class="rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Add</button>
+              </form>
+
+              <div class="mt-6 space-y-4">
+                <% if (!finance.perPersonExpenses.length) { %>
+                  <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No per-person cost items added yet.</div>
+                <% } %>
+
+                <% finance.perPersonExpenses.forEach((item) => { %>
+                  <div class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                    <form action="/admin/per-person-expenses/<%= item.id %>/update" method="post" class="grid gap-3 lg:grid-cols-[1fr_180px_auto]">
+                      <input type="text" name="itemName" value="<%= item.itemName %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <input type="number" min="0" step="0.01" name="amountPerPerson" value="<%= item.amountPerPerson %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <div class="flex flex-col gap-2 sm:flex-row">
+                        <button type="submit" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                        <button formaction="/admin/per-person-expenses/<%= item.id %>/delete" formmethod="post" onclick="return confirm('Delete this item?')" class="rounded-2xl bg-rose-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                      </div>
+                    </form>
+                    <div class="mt-3 grid gap-3 sm:grid-cols-3 text-xs text-slate-500">
+                      <span>Per person: <%= formatMoney(item.amountPerPerson) %> <%= event.currency %></span>
+                      <span>Confirmed count: <%= finance.confirmedCount %></span>
+                      <span>Total impact: <%= formatMoney(item.totalAmount) %> <%= event.currency %></span>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-8">
+            <div class="glass-panel rounded-[2rem] p-5 sm:p-8">
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-[0.35em] text-brand-200">Direct Spend</p>
+                  <h3 class="mt-3 text-2xl font-extrabold text-white">Other expenses</h3>
+                  <p class="mt-2 text-sm text-slate-300">Add costs that are not per person, such as transport, decoration, or hall-related spending.</p>
+                </div>
+                <div class="rounded-full bg-rose-500/15 px-4 py-2 text-sm font-bold text-rose-200"><%= formatMoney(finance.generalExpenseTotal) %> <%= event.currency %></div>
+              </div>
+
+              <form action="/admin/general-expenses" method="post" class="mt-6 grid gap-4 lg:grid-cols-[1fr_180px_auto]">
+                <input type="text" name="title" placeholder="Spent for" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <input type="number" min="0" step="0.01" name="amount" placeholder="Amount" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                <button type="submit" class="rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Add</button>
+              </form>
+
+              <div class="mt-6 space-y-4">
+                <% if (!finance.generalExpenses.length) { %>
+                  <div class="rounded-3xl border border-dashed border-white/10 bg-white/[0.03] p-6 text-center text-slate-400">No direct expense entries added yet.</div>
+                <% } %>
+
+                <% finance.generalExpenses.forEach((item) => { %>
+                  <div class="rounded-3xl border border-white/10 bg-white/[0.03] p-4">
+                    <form action="/admin/general-expenses/<%= item.id %>/update" method="post" class="grid gap-3 lg:grid-cols-[1fr_180px_auto]">
+                      <input type="text" name="title" value="<%= item.title %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <input type="number" min="0" step="0.01" name="amount" value="<%= item.amount %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-white outline-none focus:border-brand-400" />
+                      <div class="flex flex-col gap-2 sm:flex-row">
+                        <button type="submit" class="rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-slate-200 transition hover:bg-white/10">Save</button>
+                        <button formaction="/admin/general-expenses/<%= item.id %>/delete" formmethod="post" onclick="return confirm('Delete this expense?')" class="rounded-2xl bg-rose-500 px-4 py-3 text-sm font-bold text-white transition hover:bg-rose-400">Delete</button>
+                      </div>
+                    </form>
+                    <div class="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
+                      <span>Added <%= new Date(item.createdAt).toLocaleString() %></span>
+                      <span><%= formatMoney(item.amount) %> <%= event.currency %></span>
+                    </div>
+                  </div>
+                <% }) %>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

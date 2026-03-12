@@ -1,0 +1,42 @@
+INSERT INTO event_settings (
+  id,
+  title,
+  tagline,
+  description,
+  contribution,
+  currency,
+  collection_deadline_label,
+  date_label,
+  venue,
+  whats_app_number,
+  bkash,
+  collection_points_json,
+  note
+) VALUES (
+  1,
+  'Iftar Gathering 2026',
+  'Ahlan Sahlan - Blessed Month of Ramadan',
+  'On the occasion of the holy month of Ramadan, you are cordially invited to our Iftar gathering. Let us come together to strengthen the bonds of brotherhood, harmony, and love, and share the joy of Iftar with one another.',
+  300.00,
+  'BDT',
+  '26th Ramadan',
+  'March 18, 2026 (28 Ramadan)',
+  'Kacchi Sab (3rd Floor, City Bank Building)',
+  '8801676082387',
+  '01676082387 (Rabbi)',
+  '["Riyad Electronics (Below Southeast Bank)","Kibria Fashion (College Super Market)"]',
+  'Please provide your name and mobile number when submitting the contribution.'
+)
+ON DUPLICATE KEY UPDATE
+  title = VALUES(title),
+  tagline = VALUES(tagline),
+  description = VALUES(description),
+  contribution = VALUES(contribution),
+  currency = VALUES(currency),
+  collection_deadline_label = VALUES(collection_deadline_label),
+  date_label = VALUES(date_label),
+  venue = VALUES(venue),
+  whats_app_number = VALUES(whats_app_number),
+  bkash = VALUES(bkash),
+  collection_points_json = VALUES(collection_points_json),
+  note = VALUES(note);

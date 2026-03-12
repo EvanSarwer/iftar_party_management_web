@@ -118,6 +118,18 @@ html.light-theme .hero-ornament {
   min-width: 5.75rem;
 }
 
+.site-nav a {
+  white-space: nowrap;
+}
+
+.invoice-stack {
+  display: grid;
+}
+
+.invoice-stack > * {
+  min-width: 0;
+}
+
 html.light-theme .app-background > :first-child {
   background: radial-gradient(circle at top, rgba(182, 128, 36, 0.18), transparent 32%), linear-gradient(135deg, #fffdf8 0%, #f8fafc 40%, #eef2ff 100%) !important;
 }
@@ -310,6 +322,68 @@ html.light-theme .status-pending {
   isolation: isolate;
 }
 
+@media (max-width: 640px) {
+  .site-header {
+    backdrop-filter: blur(16px);
+  }
+
+  .site-nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-nav a {
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .theme-toggle {
+    min-width: 0;
+  }
+
+  .invoice-mobile-header {
+    display: none;
+  }
+
+  .invoice-stack {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.75rem;
+  }
+
+  .invoice-stack > [data-cell-label] {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    text-align: left !important;
+  }
+
+  .invoice-stack > [data-cell-label]::before {
+    content: attr(data-cell-label);
+    flex: 0 0 auto;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(148, 163, 184, 0.9);
+  }
+
+  .invoice-stack > [data-cell-label] > * {
+    min-width: 0;
+  }
+
+  .invoice-stack .invoice-cell-value {
+    flex: 1 1 auto;
+    text-align: right;
+  }
+
+  .invoice-stack .invoice-cell-value > * {
+    text-align: right;
+  }
+}
+
 .share-iftar-card {
   position: relative;
   overflow: hidden;
@@ -412,6 +486,10 @@ html.light-theme .share-iftar-card [class*='text-slate-100'] {
   .share-iftar-card {
     min-height: auto;
     padding: 1.25rem;
+  }
+
+  .share-card-wrapper {
+    overflow: hidden;
   }
 
   .share-iftar-card__crescent {

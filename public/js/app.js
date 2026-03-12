@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const downloadCardButton = document.querySelector('[data-download-card]');
   const shareCard = document.querySelector('[data-share-card]');
   const adminSearchInputs = Array.from(document.querySelectorAll('[data-admin-search]'));
+  const adminTabsContainer = document.querySelector('[data-admin-tabs]');
 
   const updateThemeToggle = () => {
     if (!themeToggle || !themeToggleText || !themeToggleIcon) {
@@ -90,6 +91,34 @@ document.addEventListener('DOMContentLoaded', () => {
       input.addEventListener('input', filterAdminItems);
       filterAdminItems();
     });
+  }
+
+  if (adminTabsContainer) {
+    const tabButtons = Array.from(adminTabsContainer.querySelectorAll('[data-admin-tab-button]'));
+    const tabPanels = Array.from(document.querySelectorAll('[data-admin-tab-panel]'));
+    const defaultTab = adminTabsContainer.dataset.defaultAdminTab || 'attendance';
+
+    const setActiveTab = (tabName) => {
+      tabButtons.forEach((button) => {
+        const isActive = button.dataset.adminTabButton === tabName;
+        button.classList.toggle('bg-brand-500', isActive);
+        button.classList.toggle('text-slate-950', isActive);
+        button.classList.toggle('bg-white/5', !isActive);
+        button.classList.toggle('text-slate-300', !isActive);
+      });
+
+      tabPanels.forEach((panel) => {
+        panel.classList.toggle('hidden', panel.dataset.adminTabPanel !== tabName);
+      });
+    };
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        setActiveTab(button.dataset.adminTabButton);
+      });
+    });
+
+    setActiveTab(defaultTab);
   }
 
   if (attendeeForms.length) {
