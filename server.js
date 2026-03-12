@@ -12,6 +12,17 @@ const pool = getPool();
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'CBA14@2026';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'cba14-iftar-session-secret';
+const SITE_URL = String(process.env.PUBLIC_BASE_URL || process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/$/, '');
+
+app.locals.siteMeta = {
+  siteName: 'CBA14 Iftar Gathering 2026',
+  baseUrl: SITE_URL,
+  defaultDescription:
+    'Join the CBA14 Iftar Gathering 2026 to confirm attendance, review the live calculation sheet, and share event details with classmates.',
+  defaultImage: '/og-image.svg',
+  favicon: '/favicon.svg',
+  themeColor: '#020617',
+};
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -19,6 +30,10 @@ app.set('trust proxy', 1);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use((req, res, next) => {
+  res.locals.requestPath = req.path;
+  next();
+});
 app.use(
   session({
     name: 'cba14.sid',
@@ -90,6 +105,18 @@ function formatMoney(value) {
 
 function redirectAdmin(res, message, tab = 'attendance') {
   return res.redirect(`/admin?tab=${tab}&message=${message}`);
+}
+
+function buildPageMeta({ title, description, path, noIndex = false }) {
+  const siteMeta = app.locals.siteMeta;
+
+  return {
+    title,
+    description,
+    url: `${siteMeta.baseUrl}${path}`,
+    image: `${siteMeta.baseUrl}${siteMeta.defaultImage}`,
+    noIndex,
+  };
 }
 
 async function buildCalculationViewModel() {
@@ -416,6 +443,12 @@ app.get('/', async (req, res, next) => {
     res.render('index', {
       title: 'CBA14 Iftar Gathering 2026',
       currentPage: 'home',
+      pageMeta: buildPageMeta({
+        title: 'CBA14 Iftar Gathering 2026',
+        description:
+          'Batch CBA14 reunion details, contribution information, attendee list, and a simple invoice download for the Iftar Gathering 2026.',
+        path: '/',
+      }),
       event: store.event,
       attendees,
       counts: {
@@ -438,6 +471,12 @@ app.get('/contact', async (req, res, next) => {
     res.render('contact', {
       title: 'Contact | CBA14 Iftar Gathering 2026',
       currentPage: 'contact',
+      pageMeta: buildPageMeta({
+        title: 'Contact | CBA14 Iftar Gathering 2026',
+        description:
+          'Get the payment details, venue information, collection deadline, and contact points for the CBA14 Iftar Gathering 2026.',
+        path: '/contact',
+      }),
       event: store.event,
     });
   } catch (error) {
@@ -452,6 +491,12 @@ app.get('/calculation', async (req, res, next) => {
     res.render('calculation', {
       title: 'Calculation | CBA14 Iftar Gathering 2026',
       currentPage: 'calculation',
+      pageMeta: buildPageMeta({
+        title: 'Calculation | CBA14 Iftar Gathering 2026',
+        description:
+          'View the live collection total, spending breakdown, remaining balance, and downloadable invoice for the CBA14 Iftar event.',
+        path: '/calculation',
+      }),
       ...viewModel,
     });
   } catch (error) {
@@ -465,6 +510,13 @@ app.get('/calculation/invoice', async (req, res, next) => {
 
     res.render('invoice', {
       title: 'Invoice | CBA14 Iftar Gathering 2026',
+      pageMeta: buildPageMeta({
+        title: 'Invoice | CBA14 Iftar Gathering 2026',
+        description:
+          'Printable invoice summary for the CBA14 Iftar Gathering 2026 with collection totals, expense categories, and remaining balance.',
+        path: '/calculation/invoice',
+        noIndex: true,
+      }),
       ...viewModel,
     });
   } catch (error) {
@@ -508,6 +560,13 @@ app.get('/admin', async (req, res, next) => {
     res.render('admin', {
       title: 'Admin | CBA14 Iftar Gathering 2026',
       currentPage: 'admin',
+      pageMeta: buildPageMeta({
+        title: 'Admin | CBA14 Iftar Gathering 2026',
+        description:
+          'Admin access for confirming attendees, updating the finance ledger, and managing the CBA14 Iftar Gathering 2026.',
+        path: '/admin',
+        noIndex: true,
+      }),
       event: store.event,
       isAdmin: isAuthenticated(req),
       currentAdminTab: currentTab,
@@ -795,6 +854,12 @@ app.use((req, res) => {
   res.status(404).render('404', {
     title: 'Page Not Found',
     currentPage: '',
+    pageMeta: buildPageMeta({
+      title: 'Page Not Found | CBA14 Iftar Gathering 2026',
+      description: 'The page you requested could not be found on the CBA14 Iftar Gathering 2026 website.',
+      path: req.path,
+      noIndex: true,
+    }),
   });
 });
 
@@ -803,6 +868,12 @@ app.use((error, req, res, next) => {
   res.status(500).render('500', {
     title: 'Server Error',
     currentPage: '',
+    pageMeta: buildPageMeta({
+      title: 'Server Error | CBA14 Iftar Gathering 2026',
+      description: 'The CBA14 Iftar Gathering 2026 website encountered an unexpected server error.',
+      path: req.path,
+      noIndex: true,
+    }),
   });
 });
 

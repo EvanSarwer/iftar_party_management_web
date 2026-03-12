@@ -1,0 +1,62 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="112" y1="72" x2="1082" y2="566" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#020617"/>
+      <stop offset="0.45" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <radialGradient id="glowTop" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(306 64) rotate(47.9) scale(405.368 393.576)">
+      <stop stop-color="#B68024" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#B68024" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBottom" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(972 524) rotate(180) scale(430 290)">
+      <stop stop-color="#22C55E" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#22C55E" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#EFE4C7"/>
+      <stop offset="0.55" stop-color="#D5B463"/>
+      <stop offset="1" stop-color="#B68024"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowTop)"/>
+  <rect width="1200" height="630" rx="36" fill="url(#glowBottom)"/>
+
+  <g opacity="0.2">
+    <circle cx="1034" cy="116" r="94" fill="#B68024"/>
+    <circle cx="156" cy="510" r="128" fill="#22C55E"/>
+  </g>
+
+  <rect x="72" y="72" width="1056" height="486" rx="30" fill="rgba(15,23,42,0.54)" stroke="rgba(255,255,255,0.12)"/>
+
+  <g>
+    <rect x="100" y="96" width="74" height="74" rx="22" fill="rgba(182,128,36,0.18)" stroke="rgba(239,228,199,0.16)"/>
+    <path d="M137.2 117.4C124.7 117.4 114.6 127.5 114.6 140C114.6 152.5 124.7 162.6 137.2 162.6C145.9 162.6 153.5 157.7 157.3 150.4C153.8 152.2 149.7 153.3 145.4 153.3C131.9 153.3 121.1 142.5 121.1 129C121.1 124.7 122.2 120.6 124 117.1C128 117.3 132.5 117.4 137.2 117.4Z" fill="url(#brand)"/>
+  </g>
+
+  <text x="200" y="122" fill="#D5B463" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="800" letter-spacing="7">BATCH CBA14</text>
+  <text x="100" y="258" fill="#F8FAFC" font-family="Manrope, Arial, sans-serif" font-size="72" font-weight="800">Iftar Gathering 2026</text>
+  <text x="100" y="314" fill="#CBD5E1" font-family="Manrope, Arial, sans-serif" font-size="28" font-weight="500">Attendance, contribution tracking, live calculation sheet, and shareable invoice.</text>
+
+  <g>
+    <rect x="100" y="374" width="298" height="122" rx="24" fill="rgba(16,185,129,0.12)" stroke="rgba(52,211,153,0.24)"/>
+    <text x="130" y="418" fill="#A7F3D0" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">CONTRIBUTION</text>
+    <text x="130" y="470" fill="#F8FAFC" font-family="Manrope, Arial, sans-serif" font-size="40" font-weight="800">300 BDT</text>
+  </g>
+
+  <g>
+    <rect x="426" y="374" width="298" height="122" rx="24" fill="rgba(182,128,36,0.12)" stroke="rgba(213,180,99,0.24)"/>
+    <text x="456" y="418" fill="#E3CF97" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">LIVE SUMMARY</text>
+    <text x="456" y="470" fill="#F8FAFC" font-family="Manrope, Arial, sans-serif" font-size="40" font-weight="800">Calculation Page</text>
+  </g>
+
+  <g>
+    <rect x="752" y="374" width="348" height="122" rx="24" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.16)"/>
+    <text x="782" y="418" fill="#CBD5E1" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="2">PAYMENT DETAILS</text>
+    <text x="782" y="470" fill="#F8FAFC" font-family="Manrope, Arial, sans-serif" font-size="40" font-weight="800">bKash + Invoice</text>
+  </g>
+
+  <text x="100" y="540" fill="#94A3B8" font-family="Manrope, Arial, sans-serif" font-size="22" font-weight="600">Share the event page, payment details, and live event finance with one link.</text>
+</svg>

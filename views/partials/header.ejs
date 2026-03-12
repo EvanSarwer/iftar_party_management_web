@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <%
+      const site = typeof siteMeta !== 'undefined' && siteMeta ? siteMeta : {
+        siteName: 'CBA14 Iftar Gathering 2026',
+        baseUrl: '',
+        defaultDescription: 'CBA14 Iftar Gathering 2026 event website.',
+        defaultImage: '/og-image.svg',
+        favicon: '/favicon.svg',
+        themeColor: '#020617'
+      };
+      const pageConfig = typeof pageMeta !== 'undefined' && pageMeta ? pageMeta : {};
+      const resolvedTitle = pageConfig.title || (typeof title !== 'undefined' ? title : site.siteName);
+      const resolvedDescription = pageConfig.description || site.defaultDescription;
+      const safePath = typeof requestPath !== 'undefined' && requestPath ? requestPath : '/';
+      const resolvedUrl = pageConfig.url || `${site.baseUrl || ''}${safePath}`;
+      const resolvedImage = pageConfig.image || `${site.baseUrl || ''}${site.defaultImage}`;
+      const noIndex = Boolean(pageConfig.noIndex);
+    %>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
+    <title><%= resolvedTitle %></title>
+    <meta name="description" content="<%= resolvedDescription %>" />
+    <meta name="theme-color" content="<%= site.themeColor %>" />
+    <meta name="robots" content="<%= noIndex ? 'noindex, nofollow' : 'index, follow' %>" />
+    <link rel="canonical" href="<%= resolvedUrl %>" />
+    <link rel="icon" type="image/svg+xml" href="<%= site.favicon %>" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="<%= site.siteName %>" />
+    <meta property="og:title" content="<%= resolvedTitle %>" />
+    <meta property="og:description" content="<%= resolvedDescription %>" />
+    <meta property="og:url" content="<%= resolvedUrl %>" />
+    <meta property="og:image" content="<%= resolvedImage %>" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="<%= resolvedTitle %>" />
+    <meta name="twitter:description" content="<%= resolvedDescription %>" />
+    <meta name="twitter:image" content="<%= resolvedImage %>" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
