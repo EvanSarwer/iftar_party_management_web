@@ -136,15 +136,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formData = new FormData(attendeeForm);
         const payload = Object.fromEntries(formData.entries());
-        const duplicateEntry = attendeeItems.find((item) => {
-          const existingName = normalizeName(item.dataset.name || '');
-          const existingPhone = normalizePhone(item.dataset.phone || '');
+        const submittedName = normalizeName(String(payload.name || ''));
 
-          return existingName === normalizeName(String(payload.name || '')) || existingPhone === normalizePhone(String(payload.phone || ''));
+        if (!submittedName) {
+          attendeeMessage.textContent = 'Name is required.';
+          attendeeMessage.className = 'mt-4 text-sm text-rose-300';
+          return;
+        }
+
+        const duplicateEntry = attendeeItems.find((item) => {
+          return normalizeName(item.dataset.name || '') === submittedName;
         });
 
         if (duplicateEntry) {
-          attendeeMessage.textContent = 'Name and mobile number must both be unique. Duplicate entry is not allowed.';
+          attendeeMessage.textContent = 'This name is already on the list. Each attendee name must be unique.';
           attendeeMessage.className = 'mt-4 text-sm text-rose-300';
           return;
         }

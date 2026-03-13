@@ -71,16 +71,16 @@
               <p class="text-[10px] font-bold uppercase tracking-[0.25em] text-brand-200 sm:text-xs sm:tracking-[0.35em]">Join the Gathering</p>
               <h3 class="mt-3 text-2xl font-extrabold text-white sm:text-3xl">Add your name to the attendee list</h3>
               <p class="mt-3 text-sm leading-7 text-slate-300">
-                Submit your name and mobile number. Your request will appear as pending until the admin confirms your joining.
+                Submit a name to join. Mobile number is optional. The request will appear as pending until confirmed.
               </p>
               <form class="mt-6 space-y-4" data-attendee-form>
                 <div>
-                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-name">Full name</label>
+                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-name">Full name <span class="text-rose-400">*</span></label>
                   <input id="admin-name" name="name" type="text" placeholder="Enter your name" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
                 </div>
                 <div>
-                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-phone">Mobile number</label>
-                  <input id="admin-phone" name="phone" type="text" placeholder="01XXXXXXXXX" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
+                  <label class="mb-2 block text-sm font-semibold text-slate-200" for="admin-phone">Mobile number <span class="text-xs font-normal text-slate-400">(optional)</span></label>
+                  <input id="admin-phone" name="phone" type="text" placeholder="01XXXXXXXXX" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-white outline-none ring-0 placeholder:text-slate-500 focus:border-brand-400" />
                 </div>
                 <button type="submit" class="w-full rounded-2xl bg-brand-500 px-5 py-3 font-bold text-slate-950 transition hover:bg-brand-400">Submit as Pending</button>
                 <p data-attendee-message class="mt-4 text-sm text-slate-400">Your status will be visible in the list below after submission.</p>
@@ -113,12 +113,12 @@
                     <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
                       <div class="grid gap-3 md:grid-cols-2">
                         <div>
-                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name <span class="text-rose-400">*</span></label>
                           <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
                         </div>
                         <div>
-                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
-                          <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number <span class="text-xs font-normal normal-case tracking-normal text-slate-500">(optional)</span></label>
+                          <input type="text" name="phone" value="<%= attendee.phone %>" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
                         </div>
                       </div>
 
@@ -249,12 +249,12 @@
                     <form action="/admin/update/<%= attendee.id %>" method="post" class="space-y-3">
                       <div class="grid gap-3 md:grid-cols-2">
                         <div>
-                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name</label>
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Name <span class="text-rose-400">*</span></label>
                           <input type="text" name="name" value="<%= attendee.name %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
                         </div>
                         <div>
-                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number</label>
-                          <input type="text" name="phone" value="<%= attendee.phone %>" required class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
+                          <label class="mb-2 block text-xs font-semibold uppercase tracking-[0.2em] text-slate-400">Mobile Number <span class="text-xs font-normal normal-case tracking-normal text-slate-500">(optional)</span></label>
+                          <input type="text" name="phone" value="<%= attendee.phone %>" class="w-full rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-2.5 text-sm text-white outline-none placeholder:text-slate-500 focus:border-brand-400" />
                         </div>
                       </div>
 

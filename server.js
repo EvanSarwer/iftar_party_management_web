@@ -330,29 +330,30 @@ async function readStore() {
   };
 }
 
-async function findDuplicateAttendeeRecord(name, phone, excludedId = null) {
+async function findDuplicateAttendeeRecord(name, excludedId = null) {
   const sql = excludedId
     ? `
         SELECT id, name, phone, status, created_at, confirmed_at
         FROM attendees
-        WHERE (normalized_name = ? OR normalized_phone = ?) AND id <> ?
+        WHERE normalized_name = ? AND id <> ?
         LIMIT 1
       `
     : `
         SELECT id, name, phone, status, created_at, confirmed_at
         FROM attendees
-        WHERE normalized_name = ? OR normalized_phone = ?
+        WHERE normalized_name = ?
         LIMIT 1
       `;
   const params = excludedId
-    ? [normalizeName(name), normalizePhone(phone), excludedId]
-    : [normalizeName(name), normalizePhone(phone)];
+    ? [normalizeName(name), excludedId]
+    : [normalizeName(name)];
   const [rows] = await pool.execute(sql, params);
 
   return rows.length ? mapAttendeeRow(rows[0]) : null;
 }
 
 async function createAttendeeRecord(name, phone) {
+  const phoneValue = normalizePhone(phone) || null;
   try {
     await pool.execute(
       `
@@ -371,8 +372,8 @@ async function createAttendeeRecord(name, phone) {
         `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         name,
         normalizeName(name),
-        phone,
-        normalizePhone(phone),
+        phoneValue,
+        phoneValue,
         'pending',
         new Date(),
         null,
@@ -400,19 +401,20 @@ async function updateAttendeeStatus(id, status) {
 }
 
 async function updateAttendeeRecord(id, name, phone) {
-  const duplicate = await findDuplicateAttendeeRecord(name, phone, id);
+  const duplicate = await findDuplicateAttendeeRecord(name, id);
 
   if (duplicate) {
     return 'duplicate';
   }
 
+  const phoneValue = normalizePhone(phone) || null;
   const [result] = await pool.execute(
     `
       UPDATE attendees
       SET name = ?, normalized_name = ?, phone = ?, normalized_phone = ?
       WHERE id = ?
     `,
-    [name, normalizeName(name), phone, normalizePhone(phone), id]
+    [name, normalizeName(name), phoneValue, phoneValue, id]
   );
 
   return result.affectedRows ? 'updated' : 'notfound';
@@ -533,10 +535,11 @@ app.get('/admin', async (req, res, next) => {
       reverted: 'Attendee moved back to pending.',
       updated: 'Attendee details updated successfully.',
       deleted: 'Attendee deleted successfully.',
-      invalid: 'Name and mobile number are required.',
+      invalid: 'Name is required.',
       invalidfinance: 'All required finance fields must be filled in.',
       invalidamount: 'Enter a valid amount greater than or equal to zero.',
-      duplicate: 'Name and mobile number must both be unique. Duplicate entry is not allowed.',
+      duplicate: 'This name is already on the list. Each attendee name must be unique.',
+
       notfound: 'Attendee not found.',
       recordnotfound: 'Requested finance record was not found.',
       donationadded: 'Donation added successfully.',
@@ -588,10 +591,10 @@ app.post('/api/attendees', async (req, res) => {
   const name = String(req.body.name || '').trim().replace(/\s+/g, ' ');
   const phone = String(req.body.phone || '').trim();
 
-  if (!name || !phone) {
+  if (!name) {
     return res.status(400).json({
       ok: false,
-      message: 'Name and mobile number are required.',
+      message: 'Name is required.',
     });
   }
 
@@ -601,7 +604,7 @@ app.post('/api/attendees', async (req, res) => {
     if (!result.ok && result.reason === 'duplicate') {
       return res.status(409).json({
         ok: false,
-        message: 'Name and mobile number must both be unique. Duplicate entry is not allowed.',
+        message: 'This name is already on the list. Each attendee name must be unique.',
       });
     }
 
@@ -666,7 +669,7 @@ app.post('/admin/update/:id', requireAdmin, async (req, res, next) => {
   const name = String(req.body.name || '').trim().replace(/\s+/g, ' ');
   const phone = String(req.body.phone || '').trim();
 
-  if (!name || !phone) {
+  if (!name) {
     return res.redirect('/admin?message=invalid');
   }
 
